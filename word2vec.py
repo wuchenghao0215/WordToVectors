@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from ssl import cert_time_to_seconds
 import numpy as np
 import random
 
@@ -17,7 +18,7 @@ def sigmoid(x):
     """
 
     # TODO YOUR CODE HERE
-    # s = 
+    s = 1 / (1 + np.exp(-x))
     # TODO END YOUR CODE
 
     return s
@@ -53,17 +54,17 @@ def naiveSoftmaxLossAndGradient(
     """
 
     # TODO 计算loss
-    # score = 
-    # y_hat = 
-    # loss = 
+    score = np.exp(np.dot(outsideVectors, centerWordVec))
+    y_hat = score / np.sum(np.exp(np.matmul(outsideVectors, centerWordVec)))
+    loss = -np.sum(np.log(y_hat))
     #
 
     N = outsideVectors.shape[0]
     y = np.zeros(N)
     y[outsideWordIdx] = 1
     # TODO 计算梯度
-    # gradCenterVec = 
-    # gradOutsideVecs = 
+    gradCenterVec = np.matmul(outsideVectors.T, y_hat - y)
+    gradOutsideVecs = np.matmul(np.matrix(y_hat - y).T, np.matrix(centerWordVec))
     #
 
     return loss, gradCenterVec, gradOutsideVecs
